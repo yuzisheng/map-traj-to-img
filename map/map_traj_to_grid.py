@@ -69,6 +69,7 @@ if __name__ == '__main__':
     gy_mbr = MBR(26.548, 106.584, 26.704, 106.807)
     # create map_traj_to_map instance
     map_traj_to_map = MapTrajToGrid()
+
     arr = map_traj_to_map.map_traj_to_grid(gy_taxi, 0, 2, 3, gy_mbr, 128, if_wgs=False)
     # draw heatmap
     sns.set()

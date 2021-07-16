@@ -1,11 +1,7 @@
-from common.mbr import MBR
-from common.grid import Grid
-from common.coord_transform import gcj02_to_wgs84
-
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+
+from .coord_transform import gcj02_to_wgs84
+from .grid import Grid
 
 
 class MapTrajToGrid:
@@ -24,7 +20,7 @@ class MapTrajToGrid:
             lnglat_wgs = gcj02_to_wgs84(self.traj[i][self.lng_idx], self.traj[i][self.lat_idx])
             self.traj[i][self.lng_idx] = lnglat_wgs[0]
             self.traj[i][self.lat_idx] = lnglat_wgs[1]
-        pd.DataFrame(data=self.traj, columns=None).to_csv("../data/traj_wgs.csv", index=False)
+        # pd.DataFrame(data=self.traj, columns=None).to_csv("../data/traj_wgs.csv", index=False)
         print("++ coord gcj02 to wgs84 done")
 
     def map_traj_to_grid(self, traj, time_idx, lat_idx, lng_idx, mbr, grid_size, if_wgs=True):
@@ -57,22 +53,6 @@ class MapTrajToGrid:
             except IndexError:
                 # print('({0}, {1}) is out of mbr, skip'.format(lat, lng))
                 continue
-        np.save("../data/map_traj_to_grid.npy", res)
+        # np.save("../data/map_traj_to_grid.npy", res)
         print("++ map traj to grid is done")
         return res
-
-
-if __name__ == '__main__':
-    # load data
-    gy_taxi = pd.read_csv("../data/TaxiguiAU0676.csv", header=None).values
-    # create mbr
-    gy_mbr = MBR(26.548, 106.584, 26.704, 106.807)
-    # create map_traj_to_map instance
-    map_traj_to_map = MapTrajToGrid()
-
-    arr = map_traj_to_map.map_traj_to_grid(gy_taxi, 0, 2, 3, gy_mbr, 128, if_wgs=False)
-    # draw heatmap
-    sns.set()
-    sns.heatmap(arr, square=True)
-    plt.show()
-    print("ok")
